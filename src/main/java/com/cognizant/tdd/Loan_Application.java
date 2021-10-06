@@ -7,6 +7,8 @@ public class Loan_Application {
     private final int creditScore;
     private final int savings;
     private final int qualification;
+    //status is true if loan is approved, false if not
+    private final boolean status;
 
     public int getRequestedAmount() {
         return requestedAmount;
@@ -16,12 +18,17 @@ public class Loan_Application {
         return qualification;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
     public Loan_Application(int requestedAmount, int dti, int creditScore, int savings) {
         this.requestedAmount = requestedAmount;
         this.dti = dti;
         this.creditScore = creditScore;
         this.savings = savings;
         this.qualification = isQualified();
+        status = qualification != 0;
     }
 
     //this function returns 0 if not qualified, 1 if partially qualified, and 2 if fully qualified

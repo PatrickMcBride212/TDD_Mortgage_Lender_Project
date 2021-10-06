@@ -14,6 +14,9 @@ public class Mortgage_Tests {
     @Test
     public void testBankAccountWithdrawals() {
         int withdrawal = account.withdraw(500000);
+
+        assertEquals(0, account.getPendingFunds());
+
         assertEquals(500000, withdrawal);
         assertEquals(500000, account.getBalance());
 
@@ -45,6 +48,7 @@ public class Mortgage_Tests {
         assertEquals(100000, loan1.getSavings());
         assertEquals(2, loan1.getQualification());
         assertEquals(250000, loan1.getLoanAmount());
+        assertTrue(loan1.isStatus());
 
         assertEquals(250000, loan2.getRequestedAmount());
         assertEquals(37, loan2.getDti());
@@ -52,6 +56,7 @@ public class Mortgage_Tests {
         assertEquals(100000, loan2.getSavings());
         assertEquals(0, loan2.getQualification());
         assertEquals(0, loan2.getQualification());
+        assertFalse(loan2.isStatus());
 
         assertEquals(250000, loan3.getRequestedAmount());
         assertEquals(30, loan3.getDti());
@@ -59,6 +64,7 @@ public class Mortgage_Tests {
         assertEquals(100000, loan3.getSavings());
         assertEquals(0, loan3.getQualification());
         assertEquals(0, loan3.getLoanAmount());
+        assertFalse(loan3.isStatus());
 
         assertEquals(250000, loan4.getRequestedAmount());
         assertEquals(30, loan4.getDti());
@@ -66,5 +72,6 @@ public class Mortgage_Tests {
         assertEquals(50000, loan4.getSavings());
         assertEquals(1, loan4.getQualification());
         assertEquals(200000, loan4.getLoanAmount());
+        assertTrue(loan4.isStatus());
     }
 }

@@ -2,9 +2,21 @@ package com.cognizant.tdd;
 
 public class Bank_Account {
     private int balance;
+    private int pendingFunds;
+
+
 
     public Bank_Account(int balance) {
         this.balance = balance;
+        pendingFunds = 0;
+    }
+
+    public void setPendingFunds(int pendingFunds) {
+        this.pendingFunds = pendingFunds;
+    }
+
+    public int getPendingFunds() {
+        return pendingFunds;
     }
 
     public int getBalance() {

@@ -46,4 +46,14 @@ public class Mortgage_Tests {
 		Applicant postApp3 = new Applicant(30, 700, 50000, 250000, "Partially Qualified", 200000, "Qualified");
 		assertEquals(postApp3, account.approveLoan(preApp3));
 	}
+	
+	@Test
+	public void testApprovalStatus() {
+		Applicant app1 = new Applicant(21, 700, 100000, 2500000);
+		boolean status1 = account.loanStatus(app1);
+		assertEquals(false, status1);
+		Applicant app2 = new Applicant(21, 700, 100000, 250000);
+		boolean status2 = account.loanStatus(app2);
+		assertEquals(true, status2);
+	}
 }

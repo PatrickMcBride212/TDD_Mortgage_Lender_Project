@@ -42,4 +42,13 @@ public class Bank_Account {
 		return new Applicant(applicant.getDti(), applicant.getCredit_score(), applicant.getSavings(),
 				applicant.getRequested_amount(), "Not Qualified", 0, "Denied");
 	}
+
+	public boolean loanStatus(Applicant applicant) {
+		boolean approved = false;
+		if (this.getBalance() >= applicant.getRequested_amount()) {
+			approved = true;
+			return approved;
+		}
+		return approved;
+	}
 }

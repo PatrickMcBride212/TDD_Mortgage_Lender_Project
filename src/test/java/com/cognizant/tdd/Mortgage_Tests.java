@@ -8,10 +8,23 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Mortgage_Tests {
     Bank_Account account;
     Lender lender;
+    Loan_Application loan1;
+    Loan_Application loan2;
+    Loan_Application loan3;
+    Loan_Application loan4;
+    Loan_Application loan5;
+    Loan_Application loan6;
+
     @BeforeEach
     public void setup(){
         account = new Bank_Account(1000000);
         lender = new Lender(account);
+        loan1 = new Loan_Application(250000, 21, 700, 100000);
+        loan2 = new Loan_Application(250000, 37, 700, 100000);
+        loan3 = new Loan_Application(250000, 30, 600, 100000);
+        loan4 = new Loan_Application(250000, 30, 700, 50000);
+        loan5 = new Loan_Application(250000, 21, 700, 100000);
+        loan6 = new Loan_Application(500000, 21, 700, 200000);
     }
 
     @Test
@@ -40,11 +53,6 @@ public class Mortgage_Tests {
 
     @Test
     public void testLoanApplicationApproval() {
-        Loan_Application loan1 = new Loan_Application(250000, 21, 700, 100000);
-        Loan_Application loan2 = new Loan_Application(250000, 37, 700, 100000);
-        Loan_Application loan3 = new Loan_Application(250000, 30, 600, 100000);
-        Loan_Application loan4 = new Loan_Application(250000, 30, 700, 50000);
-
         assertEquals(250000, loan1.getRequestedAmount());
         assertEquals(21, loan1.getDti());
         assertEquals(700, loan1.getCreditScore());
@@ -58,7 +66,7 @@ public class Mortgage_Tests {
         assertEquals(700, loan2.getCreditScore());
         assertEquals(100000, loan2.getSavings());
         assertEquals(0, loan2.getQualification());
-        assertEquals(0, loan2.getQualification());
+        assertEquals(0, loan2.getLoanAmount());
         assertFalse(loan2.isStatus());
 
         assertEquals(250000, loan3.getRequestedAmount());
@@ -80,13 +88,6 @@ public class Mortgage_Tests {
 
     @Test
     public void lenderPendingApplicationQueueTests() {
-        Lender lender = new Lender(account);
-
-        Loan_Application loan1 = new Loan_Application(250000, 21, 700, 100000);
-        Loan_Application loan2 = new Loan_Application(250000, 37, 700, 100000);
-        Loan_Application loan3 = new Loan_Application(250000, 30, 600, 100000);
-        Loan_Application loan4 = new Loan_Application(250000, 30, 700, 50000);
-
         lender.addApplication(loan1);
         lender.addApplication(loan2);
         lender.addApplication(loan3);
@@ -94,17 +95,34 @@ public class Mortgage_Tests {
 
         //since loans 2 and 3 did not qualify, we should not see them in the list of pending loans for the lender
 
-        assertTrue(lender.pendingApplications.contains(loan1));
-        assertFalse(lender.pendingApplications.contains(loan2));
-        assertFalse(lender.pendingApplications.contains(loan3));
-        assertTrue(lender.pendingApplications.contains(loan4));
+        assertTrue(lender.getPendingApplications().contains(loan1));
+        assertFalse(lender.getPendingApplications().contains(loan2));
+        assertFalse(lender.getPendingApplications().contains(loan3));
+        assertTrue(lender.getPendingApplications().contains(loan4));
     }
 
-    /*
     @Test
     public void lenderProcessPendingLoansTest() {
+        lender.addApplication(loan1);
+        lender.addApplication(loan2);
+        lender.addApplication(loan3);
+        lender.addApplication(loan4);
+        lender.addApplication(loan5);
+        lender.addApplication(loan6);
 
+        assertTrue(lender.getPendingApplications().contains(loan1));
+        assertFalse(lender.getPendingApplications().contains(loan2));
+        assertFalse(lender.getPendingApplications().contains(loan3));
+        assertTrue(lender.getPendingApplications().contains(loan4));
+        assertTrue(lender.getPendingApplications().contains(loan5));
+        assertTrue(lender.getPendingApplications().contains(loan6));
+
+        lender.processPendingApplications();
+
+        assertTrue(lender.getApprovedApplications().get(0).equals(loan1));
+        assertTrue(lender.getApprovedApplications().get(1).equals(loan4));
+        assertTrue(lender.getApprovedApplications().get(2).equals(loan5));
+        assertTrue(lender.getOnHoldApplications().get(0).equals(loan6));
     }
 
-     */
 }

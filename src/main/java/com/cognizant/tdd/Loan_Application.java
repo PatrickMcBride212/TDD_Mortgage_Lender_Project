@@ -64,4 +64,25 @@ public class Loan_Application {
     public int getSavings() {
         return savings;
     }
+
+    public void printApplication() {
+        System.out.printf("Requested Amount: %d\n", requestedAmount);
+        System.out.printf("Loan Amount: %d\n", loanAmount);
+        System.out.printf("DTI: %d\n", dti);
+        System.out.printf("Credit Score: %d\n", creditScore);
+        System.out.printf("Savings: %d\n", savings);
+        System.out.printf("Qualification: %d\n", qualification);
+        System.out.printf("Status: %b\n", status);
+        System.out.println("=====");
+    }
+
+    public boolean equals(Loan_Application comparison) {
+        return comparison.getRequestedAmount() == this.requestedAmount
+                && comparison.getLoanAmount() == this.loanAmount
+                && comparison.getDti() == this.dti
+                && comparison.getCreditScore() == this.creditScore
+                && comparison.getSavings() == this.savings
+                && comparison.qualification == this.qualification
+                && comparison.isStatus() == this.status;
+    }
 }

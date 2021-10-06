@@ -56,4 +56,13 @@ public class Mortgage_Tests {
 		boolean status2 = account.loanStatus(app2);
 		assertEquals(true, status2);
 	}
+	
+	@Test
+	public void testPending() {
+		Applicant preApp = new Applicant(21, 700, 100000, 250000);
+		Applicant postApp = account.approveLoan(preApp);
+		account.transferFunds(postApp);
+		assertEquals(750000, account.getBalance());
+		assertEquals(250000, account.getPending());
+	}
 }

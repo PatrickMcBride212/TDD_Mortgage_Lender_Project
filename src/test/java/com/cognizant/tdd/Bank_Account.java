@@ -2,6 +2,7 @@ package com.cognizant.tdd;
 
 public class Bank_Account {
 	private int balance;
+	private int pending;
 
 	public Bank_Account(int balance) {
 		this.balance = balance;
@@ -15,6 +16,14 @@ public class Bank_Account {
 		return balance;
 	}
 
+	public void setPending(int pending) {
+		this.pending = pending;
+	}
+
+	public int getPending() {
+		return pending;
+	}
+
 	public void deposit(int amount) {
 		balance += amount;
 	}
@@ -25,6 +34,16 @@ public class Bank_Account {
 			return amount;
 		} else {
 			return 0;
+		}
+	}
+	
+	public void addPending(int amount) {
+		pending += amount;
+	}
+	
+	public void removePending(int amount) {
+		if (amount <= pending) {
+			pending -= amount;
 		}
 	}
 
@@ -50,5 +69,13 @@ public class Bank_Account {
 			return approved;
 		}
 		return approved;
+	}
+	
+	public void transferFunds(Applicant applicant) {
+		boolean approved = loanStatus(applicant);
+		if (approved) {
+			int amount = this.withdraw(applicant.getLoan_amount());
+			this.addPending(amount);
+		}
 	}
 }

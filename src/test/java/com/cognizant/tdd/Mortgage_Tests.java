@@ -37,13 +37,13 @@ public class Mortgage_Tests {
 	@Test
 	public void testApproval() {
 		Applicant preApp1 = new Applicant(21, 700, 100000, 250000);
-		Applicant postApp1 = account.approveLoan(preApp1);
+		Applicant postApp1 = new Applicant(21, 700, 100000, 250000, "Qualified", 250000, "Qualified");
 		assertEquals(postApp1, account.approveLoan(preApp1));
 		Applicant preApp2 = new Applicant(37, 700, 100000, 250000);
-		Applicant postApp2 = account.approveLoan(preApp2);
-		assertEquals(postApp2, account.approveLoan(postApp2));
+		Applicant postApp2 = new Applicant(37, 700, 100000, 250000, "Not Qualified", 0, "Denied");
+		assertEquals(postApp2, account.approveLoan(preApp2));
 		Applicant preApp3 = new Applicant(30, 700, 50000, 250000);
-		Applicant postApp3 = account.approveLoan(preApp3);
-		assertEquals(postApp3, account.approveLoan(postApp3));
+		Applicant postApp3 = new Applicant(30, 700, 50000, 250000, "Partially Qualified", 200000, "Qualified");
+		assertEquals(postApp3, account.approveLoan(preApp3));
 	}
 }

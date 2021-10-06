@@ -40,6 +40,6 @@ public class Bank_Account {
 			return result;
 		}
 		return new Applicant(applicant.getDti(), applicant.getCredit_score(), applicant.getSavings(),
-				applicant.getRequested_amount(), "Not Qualified", 0, "Not Qualified");
+				applicant.getRequested_amount(), "Not Qualified", 0, "Denied");
 	}
 }

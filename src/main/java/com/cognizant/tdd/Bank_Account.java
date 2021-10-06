@@ -11,6 +11,11 @@ public class Bank_Account {
         pendingFunds = 0;
     }
 
+    public void transferToPendingFunds(int amount) {
+        balance -= amount;
+        pendingFunds += amount;
+    }
+
     public void setPendingFunds(int pendingFunds) {
         this.pendingFunds = pendingFunds;
     }

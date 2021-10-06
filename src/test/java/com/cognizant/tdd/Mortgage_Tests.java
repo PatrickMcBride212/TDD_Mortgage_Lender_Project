@@ -74,4 +74,21 @@ public class Mortgage_Tests {
         assertEquals(200000, loan4.getLoanAmount());
         assertTrue(loan4.isStatus());
     }
+
+    @Test
+    public void lenderFunctionalityTests() {
+        Lender lender = new Lender(account);
+
+        Loan_Application loan1 = new Loan_Application(250000, 21, 700, 100000);
+        Loan_Application loan2 = new Loan_Application(250000, 37, 700, 100000);
+        Loan_Application loan3 = new Loan_Application(250000, 30, 600, 100000);
+        Loan_Application loan4 = new Loan_Application(250000, 30, 700, 50000);
+
+        lender.addApplication(loan1);
+        lender.addApplication(loan2);
+        lender.addApplication(loan3);
+        lender.addApplication(loan4);
+
+
+    }
 }

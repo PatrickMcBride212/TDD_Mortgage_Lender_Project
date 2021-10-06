@@ -31,4 +31,24 @@ public class Mortgage_Tests {
         account.deposit(100000);
         assertEquals(1100000, account.getBalance());
     }
+
+    @Test
+    public void testLoanApplicationApproval() {
+        Loan_Application loan1 = new Loan_Application(250000, 21, 700, 100000);
+        Loan_Application loan2 = new Loan_Application(250000, 37, 700, 100000);
+        Loan_Application loan3 = new Loan_Application(250000, 30, 600, 100000);
+        Loan_Application loan4 = new Loan_Application(250000, 30, 700, 50000);
+
+        assertEquals(2, loan1.getQualification());
+        assertEquals(250000, loan1.getLoanAmount());
+
+        assertEquals(0, loan2.getQualification());
+        assertEquals(0, loan2.getQualification());
+
+        assertEquals(0, loan3.getQualification());
+        assertEquals(0, loan3.getLoanAmount());
+
+        assertEquals(1, loan4.getQualification());
+        assertEquals(200000, loan4.getLoanAmount());
+    }
 }

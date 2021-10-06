@@ -39,15 +39,31 @@ public class Mortgage_Tests {
         Loan_Application loan3 = new Loan_Application(250000, 30, 600, 100000);
         Loan_Application loan4 = new Loan_Application(250000, 30, 700, 50000);
 
+        assertEquals(250000, loan1.getRequestedAmount());
+        assertEquals(21, loan1.getDti());
+        assertEquals(700, loan1.getCreditScore());
+        assertEquals(100000, loan1.getSavings());
         assertEquals(2, loan1.getQualification());
         assertEquals(250000, loan1.getLoanAmount());
 
+        assertEquals(250000, loan2.getRequestedAmount());
+        assertEquals(37, loan2.getDti());
+        assertEquals(700, loan2.getCreditScore());
+        assertEquals(100000, loan2.getSavings());
         assertEquals(0, loan2.getQualification());
         assertEquals(0, loan2.getQualification());
 
+        assertEquals(250000, loan3.getRequestedAmount());
+        assertEquals(30, loan3.getDti());
+        assertEquals(600, loan3.getCreditScore());
+        assertEquals(100000, loan3.getSavings());
         assertEquals(0, loan3.getQualification());
         assertEquals(0, loan3.getLoanAmount());
 
+        assertEquals(250000, loan4.getRequestedAmount());
+        assertEquals(30, loan4.getDti());
+        assertEquals(700, loan4.getCreditScore());
+        assertEquals(50000, loan4.getSavings());
         assertEquals(1, loan4.getQualification());
         assertEquals(200000, loan4.getLoanAmount());
     }

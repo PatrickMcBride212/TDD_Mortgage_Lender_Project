@@ -10,6 +10,9 @@ public class Lender {
 
     public Lender(Bank_Account account) {
         this.account = account;
+        pendingApplications = new ArrayList<>();
+        approvedApplications = new ArrayList<>();
+        onHoldApplications = new ArrayList<>();
     }
 
     public void addApplication(Loan_Application application) {

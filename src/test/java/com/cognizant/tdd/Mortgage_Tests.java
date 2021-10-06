@@ -7,9 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class Mortgage_Tests {
     Bank_Account account;
-
+    Lender lender;
     @BeforeEach
-    public void setup(){ account = new Bank_Account(1000000);}
+    public void setup(){
+        account = new Bank_Account(1000000);
+        lender = new Lender(account);
+    }
 
     @Test
     public void testBankAccountWithdrawals() {
@@ -76,7 +79,7 @@ public class Mortgage_Tests {
     }
 
     @Test
-    public void lenderFunctionalityTests() {
+    public void lenderPendingApplicationQueueTests() {
         Lender lender = new Lender(account);
 
         Loan_Application loan1 = new Loan_Application(250000, 21, 700, 100000);
@@ -89,6 +92,19 @@ public class Mortgage_Tests {
         lender.addApplication(loan3);
         lender.addApplication(loan4);
 
+        //since loans 2 and 3 did not qualify, we should not see them in the list of pending loans for the lender
+
+        assertTrue(lender.pendingApplications.contains(loan1));
+        assertFalse(lender.pendingApplications.contains(loan2));
+        assertFalse(lender.pendingApplications.contains(loan3));
+        assertTrue(lender.pendingApplications.contains(loan4));
+    }
+
+    /*
+    @Test
+    public void lenderProcessPendingLoansTest() {
 
     }
+
+     */
 }

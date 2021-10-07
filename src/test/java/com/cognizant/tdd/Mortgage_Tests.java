@@ -135,11 +135,22 @@ public class Mortgage_Tests {
         lender.addApplication(loan6);
 
         assertTrue(lender.getPendingApplications().contains(loan1));
+        assertFalse(lender.getDeniedApplications().contains(loan1));
+
         assertFalse(lender.getPendingApplications().contains(loan2));
+        assertTrue(lender.getDeniedApplications().contains(loan2));
+
         assertFalse(lender.getPendingApplications().contains(loan3));
+        assertTrue(lender.getDeniedApplications().contains(loan3));
+
         assertTrue(lender.getPendingApplications().contains(loan4));
+        assertFalse(lender.getDeniedApplications().contains(loan4));
+
         assertTrue(lender.getPendingApplications().contains(loan5));
+        assertFalse(lender.getDeniedApplications().contains(loan5));
+
         assertTrue(lender.getPendingApplications().contains(loan6));
+        assertFalse(lender.getDeniedApplications().contains(loan6));
 
         lender.processPendingApplications();
 

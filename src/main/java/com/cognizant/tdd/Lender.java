@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class Lender {
     Bank_Account account;
     private ArrayList<Loan_Application> pendingApplications;
+    private ArrayList<Loan_Application> deniedApplications;
     private HashMap<Integer, Loan_Application> approvedApplications;
     private ArrayList<Loan_Application> onHoldApplications;
     private ArrayList<Loan_Application> acceptedLoans;
@@ -17,6 +18,7 @@ public class Lender {
     public Lender(Bank_Account account) {
         this.account = account;
         pendingApplications = new ArrayList<>();
+        deniedApplications = new ArrayList<>();
         approvedApplications = new HashMap<>();
         onHoldApplications = new ArrayList<>();
         acceptedLoans = new ArrayList<>();
@@ -41,6 +43,8 @@ public class Lender {
     public void addApplication(@NotNull Loan_Application application) {
         if (application.getQualification() != 0) {
             pendingApplications.add(application);
+        } else {
+            deniedApplications.add(application);
         }
     }
 
@@ -62,6 +66,10 @@ public class Lender {
         return pendingApplications;
     }
 
+    public ArrayList<Loan_Application> getDeniedApplications() {
+        return deniedApplications;
+    }
+
     public HashMap<Integer, Loan_Application> getApprovedApplications() {
         return approvedApplications;
     }
@@ -80,6 +88,7 @@ public class Lender {
 
     public void displayAllLoans() {
         displayPendingLoans();
+        displayDeniedLoans();
         displayOnHoldApplications();
         displayApprovedLoans();
         displayAcceptedLoans();
@@ -92,6 +101,17 @@ public class Lender {
             System.out.println("None");
         } else {
             for (Loan_Application application : pendingApplications) {
+                application.printApplication();
+            }
+        }
+    }
+
+    public void displayDeniedLoans() {
+        System.out.println("Denied Loans:");
+        if (deniedApplications.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Loan_Application application : deniedApplications) {
                 application.printApplication();
             }
         }

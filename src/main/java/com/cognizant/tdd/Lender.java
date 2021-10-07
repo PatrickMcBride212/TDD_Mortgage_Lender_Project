@@ -11,6 +11,7 @@ public class Lender {
     private HashMap<Integer, Loan_Application> approvedApplications;
     private ArrayList<Loan_Application> onHoldApplications;
     private ArrayList<Loan_Application> acceptedLoans;
+    private ArrayList<Loan_Application> rejectedLoans;
     int loanNumber;
 
     public Lender(Bank_Account account) {
@@ -19,6 +20,7 @@ public class Lender {
         approvedApplications = new HashMap<>();
         onHoldApplications = new ArrayList<>();
         acceptedLoans = new ArrayList<>();
+        rejectedLoans = new ArrayList<>();
         loanNumber = 0;
     }
 
@@ -49,6 +51,13 @@ public class Lender {
         account.withdrawFromPendingFunds(loan.getLoanAmount());
     }
 
+    public void loanRejected(int loanNumber) {
+        Loan_Application loan = approvedApplications.get(loanNumber);
+        approvedApplications.remove(loanNumber);
+        rejectedLoans.add(loan);
+        account.transferFromPendingFunds(loan.getLoanAmount());
+    }
+
     public ArrayList<Loan_Application> getPendingApplications() {
         return pendingApplications;
     }
@@ -59,5 +68,13 @@ public class Lender {
 
     public ArrayList<Loan_Application> getOnHoldApplications() {
         return onHoldApplications;
+    }
+
+    public ArrayList<Loan_Application> getAcceptedLoans() {
+        return acceptedLoans;
+    }
+
+    public ArrayList<Loan_Application> getRejectedLoans() {
+        return rejectedLoans;
     }
 }

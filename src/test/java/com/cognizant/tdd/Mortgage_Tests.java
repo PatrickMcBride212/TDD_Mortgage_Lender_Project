@@ -148,6 +148,55 @@ public class Mortgage_Tests {
         assertEquals(loan5, lender.getApprovedApplications().get(loan5.getLoanNumber()));
         assertTrue(lender.getOnHoldApplications().get(0).equals(loan6));
 
+        lender.loanAccepted(loan1.getLoanNumber());
+        assertEquals(450000, lender.account.getPendingFunds());
+        assertTrue(lender.getAcceptedLoans().contains(loan1));
+
+        lender.loanAccepted(loan4.getLoanNumber());
+        assertEquals(250000, lender.account.getPendingFunds());
+        assertTrue(lender.getAcceptedLoans().contains(loan4));
+
+        lender.loanAccepted(loan5.getLoanNumber());
+        assertEquals(0, lender.account.getPendingFunds());
+        assertTrue(lender.getAcceptedLoans().contains(loan5));
+    }
+
+    @Test
+    public void loanRejectionTest() {
+        lender.addApplication(loan1);
+        lender.addApplication(loan2);
+        lender.addApplication(loan3);
+        lender.addApplication(loan4);
+        lender.addApplication(loan5);
+        lender.addApplication(loan6);
+
+        assertTrue(lender.getPendingApplications().contains(loan1));
+        assertFalse(lender.getPendingApplications().contains(loan2));
+        assertFalse(lender.getPendingApplications().contains(loan3));
+        assertTrue(lender.getPendingApplications().contains(loan4));
+        assertTrue(lender.getPendingApplications().contains(loan5));
+        assertTrue(lender.getPendingApplications().contains(loan6));
+
+        lender.processPendingApplications();
+
+        assertEquals(loan1, lender.getApprovedApplications().get(loan1.getLoanNumber()));
+        assertEquals(loan4, lender.getApprovedApplications().get(loan4.getLoanNumber()));
+        assertEquals(loan5, lender.getApprovedApplications().get(loan5.getLoanNumber()));
+        assertTrue(lender.getOnHoldApplications().get(0).equals(loan6));
+
+        lender.loanAccepted(loan1.getLoanNumber());
+        assertEquals(450000, lender.account.getPendingFunds());
+        assertTrue(lender.getAcceptedLoans().contains(loan1));
+
+        lender.loanAccepted(loan4.getLoanNumber());
+        assertEquals(250000, lender.account.getPendingFunds());
+        assertTrue(lender.getAcceptedLoans().contains(loan4));
+
+        lender.loanRejected(loan5.getLoanNumber());
+        assertEquals(0, lender.account.getPendingFunds());
+        assertFalse(lender.getAcceptedLoans().contains(loan5));
+        assertTrue(lender.getRejectedLoans().contains(loan5));
+        assertEquals(550000, lender.account.getBalance());
     }
 
 }

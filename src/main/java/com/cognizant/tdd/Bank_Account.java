@@ -16,6 +16,11 @@ public class Bank_Account {
         pendingFunds += amount;
     }
 
+    public void transferFromPendingFunds(int amount) {
+        balance += amount;
+        pendingFunds -= amount;
+    }
+
     public void withdrawFromPendingFunds(int amount) {
         pendingFunds -= amount;
     }

@@ -197,6 +197,8 @@ public class Mortgage_Tests {
         assertFalse(lender.getAcceptedLoans().contains(loan5));
         assertTrue(lender.getRejectedLoans().contains(loan5));
         assertEquals(550000, lender.account.getBalance());
+
+        lender.displayAllLoans();
     }
 
 }

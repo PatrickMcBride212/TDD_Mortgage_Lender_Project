@@ -77,4 +77,67 @@ public class Lender {
     public ArrayList<Loan_Application> getRejectedLoans() {
         return rejectedLoans;
     }
+
+    public void displayAllLoans() {
+        displayPendingLoans();
+        displayOnHoldApplications();
+        displayApprovedLoans();
+        displayAcceptedLoans();
+        displayRejectedLoans();
+    }
+
+    public void displayPendingLoans() {
+        System.out.println("Pending applications:");
+        if (pendingApplications.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Loan_Application application : pendingApplications) {
+                application.printApplication();
+            }
+        }
+    }
+
+    public void displayApprovedLoans() {
+        System.out.println("Approved Loans:");
+        if (approvedApplications.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Loan_Application application : approvedApplications.values()) {
+                application.printApplication();
+            }
+        }
+    }
+
+    public void displayOnHoldApplications() {
+        System.out.println("Applications on Hold:");
+        if (onHoldApplications.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Loan_Application application : onHoldApplications) {
+                application.printApplication();
+            }
+        }
+    }
+
+    public void displayAcceptedLoans() {
+        System.out.println("Accepted loans:");
+        if (acceptedLoans.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Loan_Application application : acceptedLoans) {
+                application.printApplication();
+            }
+        }
+    }
+
+    public void displayRejectedLoans() {
+        System.out.println("Rejected Loans:");
+        if (rejectedLoans.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Loan_Application application : rejectedLoans) {
+                application.printApplication();
+            }
+        }
+    }
 }

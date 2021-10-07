@@ -76,6 +76,9 @@ public class Loan_Application {
     }
 
     public void printApplication() {
+        if (loanNumber != -1) {
+            System.out.printf("Loan Number: %d\n", loanNumber);
+        }
         System.out.printf("Requested Amount: %d\n", requestedAmount);
         System.out.printf("Loan Amount: %d\n", loanAmount);
         System.out.printf("DTI: %d\n", dti);

@@ -3,30 +3,33 @@ package com.cognizant.tdd;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Lender {
     Bank_Account account;
     private ArrayList<Loan_Application> pendingApplications;
-    private ArrayList<Loan_Application> approvedApplications;
+    private HashMap<Integer, Loan_Application> approvedApplications;
     private ArrayList<Loan_Application> onHoldApplications;
+    private ArrayList<Loan_Application> acceptedLoans;
+    int loanNumber;
 
     public Lender(Bank_Account account) {
         this.account = account;
         pendingApplications = new ArrayList<>();
-        approvedApplications = new ArrayList<>();
+        approvedApplications = new HashMap<>();
         onHoldApplications = new ArrayList<>();
+        acceptedLoans = new ArrayList<>();
+        loanNumber = 0;
     }
 
     public void processPendingApplications() {
         for (Loan_Application application : pendingApplications) {
-            System.out.printf("Current Balance: %d\n", account.getBalance());
-            System.out.printf("Loan amount: %d\n", application.getLoanAmount());
             if (account.getBalance() >= application.getLoanAmount()) {
-                System.out.println("Approved");
-                approvedApplications.add(application);
+                approvedApplications.put(loanNumber, application);
                 account.transferToPendingFunds(application.getLoanAmount());
+                application.setLoanNumber(loanNumber);
+                loanNumber++;
             } else {
-                System.out.println("On Hold");
                 onHoldApplications.add(application);
             }
         }
@@ -39,11 +42,18 @@ public class Lender {
         }
     }
 
+    public void loanAccepted(int loanNumber) {
+        Loan_Application loan = approvedApplications.get(loanNumber);
+        approvedApplications.remove(loanNumber);
+        acceptedLoans.add(loan);
+        account.withdrawFromPendingFunds(loan.getLoanAmount());
+    }
+
     public ArrayList<Loan_Application> getPendingApplications() {
         return pendingApplications;
     }
 
-    public ArrayList<Loan_Application> getApprovedApplications() {
+    public HashMap<Integer, Loan_Application> getApprovedApplications() {
         return approvedApplications;
     }
 

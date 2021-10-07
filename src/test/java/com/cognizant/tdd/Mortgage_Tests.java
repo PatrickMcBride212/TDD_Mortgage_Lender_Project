@@ -119,10 +119,35 @@ public class Mortgage_Tests {
 
         lender.processPendingApplications();
 
-        assertTrue(lender.getApprovedApplications().get(0).equals(loan1));
-        assertTrue(lender.getApprovedApplications().get(1).equals(loan4));
-        assertTrue(lender.getApprovedApplications().get(2).equals(loan5));
+        assertEquals(loan1, lender.getApprovedApplications().get(loan1.getLoanNumber()));
+        assertEquals(loan4, lender.getApprovedApplications().get(loan4.getLoanNumber()));
+        assertEquals(loan5, lender.getApprovedApplications().get(loan5.getLoanNumber()));
         assertTrue(lender.getOnHoldApplications().get(0).equals(loan6));
+    }
+
+    @Test
+    public void loanAcceptanceTest() {
+        lender.addApplication(loan1);
+        lender.addApplication(loan2);
+        lender.addApplication(loan3);
+        lender.addApplication(loan4);
+        lender.addApplication(loan5);
+        lender.addApplication(loan6);
+
+        assertTrue(lender.getPendingApplications().contains(loan1));
+        assertFalse(lender.getPendingApplications().contains(loan2));
+        assertFalse(lender.getPendingApplications().contains(loan3));
+        assertTrue(lender.getPendingApplications().contains(loan4));
+        assertTrue(lender.getPendingApplications().contains(loan5));
+        assertTrue(lender.getPendingApplications().contains(loan6));
+
+        lender.processPendingApplications();
+
+        assertEquals(loan1, lender.getApprovedApplications().get(loan1.getLoanNumber()));
+        assertEquals(loan4, lender.getApprovedApplications().get(loan4.getLoanNumber()));
+        assertEquals(loan5, lender.getApprovedApplications().get(loan5.getLoanNumber()));
+        assertTrue(lender.getOnHoldApplications().get(0).equals(loan6));
+
     }
 
 }

@@ -9,6 +9,15 @@ public class Loan_Application {
     private final int qualification;
     //status is true if loan is approved, false if not
     private final boolean status;
+    private int loanNumber;
+
+    public void setLoanNumber(int number) {
+        loanNumber = number;
+    }
+
+    public int getLoanNumber() {
+        return loanNumber;
+    }
 
     public int getRequestedAmount() {
         return requestedAmount;
@@ -29,6 +38,7 @@ public class Loan_Application {
         this.savings = savings;
         this.qualification = isQualified();
         status = qualification != 0;
+        loanNumber = -1;
     }
 
     //this function returns 0 if not qualified, 1 if partially qualified, and 2 if fully qualified

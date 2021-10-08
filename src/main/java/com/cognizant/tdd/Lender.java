@@ -61,14 +61,18 @@ public class Lender {
         }
     }
 
+    //helper function for above method
     public long getDateDifference(Date applicationDate) {
         return TimeUnit.DAYS.convert(lenderDate.getTime() - applicationDate.getTime(), TimeUnit.MILLISECONDS);
     }
 
+    //getter for lender date
     public Date getLenderDate() {
         return lenderDate;
     }
 
+    //iterates through all pending applications and either approves them or puts them on hold depending on amount
+    //in lender's bank account balance
     public void processPendingApplications() {
         for (Loan_Application application : pendingApplications) {
             if (account.getBalance() >= application.getLoanAmount()) {
@@ -83,6 +87,7 @@ public class Lender {
         pendingApplications.clear();
     }
 
+    //method for adding application to lender's queue. Automatically rejects if loan application not qualified.
     public void addApplication(@NotNull Loan_Application application) {
         if (application.getQualification() != 0) {
             pendingApplications.add(application);
@@ -91,6 +96,7 @@ public class Lender {
         }
     }
 
+    //method for loan applicants to accept their loan. Funds then withdrawn from lender's pending funds
     public void loanAccepted(int loanNumber) {
         Loan_Application loan = approvedApplications.get(loanNumber);
         approvedApplications.remove(loanNumber);
@@ -98,6 +104,8 @@ public class Lender {
         account.withdrawFromPendingFunds(loan.getLoanAmount());
     }
 
+    //method for loan applicants to reject their loan. Funds then withdrawn from lender's pending funds and placed
+    //back into balance
     public void loanRejected(int loanNumber) {
         Loan_Application loan = approvedApplications.get(loanNumber);
         approvedApplications.remove(loanNumber);
@@ -105,32 +113,33 @@ public class Lender {
         account.transferFromPendingFunds(loan.getLoanAmount());
     }
 
+    //getter for pending applications queue
     public ArrayList<Loan_Application> getPendingApplications() {
         return pendingApplications;
     }
-
+    //getter for denied applications
     public ArrayList<Loan_Application> getDeniedApplications() {
         return deniedApplications;
     }
-
+    //getter for approved applications
     public HashMap<Integer, Loan_Application> getApprovedApplications() {
         return approvedApplications;
     }
-
+    //getter for applications on hold
     public ArrayList<Loan_Application> getOnHoldApplications() {
         return onHoldApplications;
     }
-
+    //getter for accepted loans
     public ArrayList<Loan_Application> getAcceptedLoans() {
         return acceptedLoans;
     }
-
+    //getter for rejected loans
     public ArrayList<Loan_Application> getRejectedLoans() {
         return rejectedLoans;
     }
-
+    //getter for expired applications
     public ArrayList<Loan_Application> getExpiredApplications() { return expiredApplications; }
-
+    //method to print all loans
     public void displayAllLoans() {
         displayPendingLoans();
         displayDeniedLoans();
@@ -140,7 +149,7 @@ public class Lender {
         displayRejectedLoans();
         displayExpiredLoans();
     }
-
+    //method to print expired loans
     public void displayExpiredLoans() {
         System.out.println("Expired applications:");
         if (expiredApplications.isEmpty()) {
@@ -151,7 +160,7 @@ public class Lender {
             }
         }
     }
-
+    //method to print pending loans
     public void displayPendingLoans() {
         System.out.println("Pending applications:");
         if (pendingApplications.isEmpty()) {
@@ -162,7 +171,7 @@ public class Lender {
             }
         }
     }
-
+    //method to print denied loans
     public void displayDeniedLoans() {
         System.out.println("Denied Loans:");
         if (deniedApplications.isEmpty()) {
@@ -173,7 +182,7 @@ public class Lender {
             }
         }
     }
-
+    //method to print approved loans
     public void displayApprovedLoans() {
         System.out.println("Approved Loans:");
         if (approvedApplications.isEmpty()) {
@@ -184,7 +193,7 @@ public class Lender {
             }
         }
     }
-
+    //method to print loans on hold
     public void displayOnHoldApplications() {
         System.out.println("Applications on Hold:");
         if (onHoldApplications.isEmpty()) {
@@ -195,7 +204,7 @@ public class Lender {
             }
         }
     }
-
+    //method to print accepted loans
     public void displayAcceptedLoans() {
         System.out.println("Accepted loans:");
         if (acceptedLoans.isEmpty()) {
@@ -206,7 +215,7 @@ public class Lender {
             }
         }
     }
-
+    //method to print rejected loans
     public void displayRejectedLoans() {
         System.out.println("Rejected Loans:");
         if (rejectedLoans.isEmpty()) {

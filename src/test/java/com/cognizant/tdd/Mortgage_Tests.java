@@ -261,9 +261,11 @@ public class Mortgage_Tests {
         assertFalse(lender.getAcceptedLoans().contains(loan5));
         assertTrue(lender.getRejectedLoans().contains(loan5));
         assertEquals(550000, lender.account.getBalance());
-
-        //lender.displayAllLoans();
     }
+
+    //This test verifies that the expiration of loans is handled properly by the lender. Once the lender's date is
+    //updated, they will take all loans filed more than 3 days ago and put them in the expired arraylist.
+    //This also tests the loan information display at the very end.
 
     @Test
     public void applicationExpiresTest() {
@@ -286,43 +288,23 @@ public class Mortgage_Tests {
         }
 
         lender.setLenderDate(newDate);
+
+        lender.addApplication(loan7);
+        lender.addApplication(loan8);
+
+        lender.processPendingApplications();
+
         lender.addApplication(loan6);
 
         assertTrue(lender.getAcceptedLoans().contains(loan1));
         assertTrue(lender.getExpiredApplications().contains(loan4));
         assertTrue(lender.getRejectedLoans().contains(loan5));
         assertTrue(lender.getPendingApplications().contains(loan6));
-    }
-
-    @Test
-    public void viewAccounts() {
-        lender.addApplication(loan1);
-        lender.addApplication(loan2);
-        lender.addApplication(loan3);
-        lender.addApplication(loan4);
-
-        lender.processPendingApplications();
-
-        lender.addApplication(loan5);
-        lender.addApplication(loan6);
-
-        lender.loanAccepted(loan1.getLoanNumber());
-        lender.loanRejected(loan4.getLoanNumber());
-
-        Date newDate = null;
-        try {
-            newDate = dateFiledFormat.parse("10-8-2021");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        lender.setLenderDate(newDate);
-        lender.account.deposit(5);
-
-        lender.addApplication(loan7);
-        lender.addApplication(loan8);
+        assertTrue(lender.getDeniedApplications().contains(loan2));
+        assertTrue(lender.getDeniedApplications().contains(loan3));
 
         lender.displayAllLoans();
+
     }
 
 }

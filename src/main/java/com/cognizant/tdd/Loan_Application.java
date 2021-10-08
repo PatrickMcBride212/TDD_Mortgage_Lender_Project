@@ -1,5 +1,7 @@
 package com.cognizant.tdd;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,31 +16,31 @@ public class Loan_Application {
     //status is true if loan is approved, false if not
     private final boolean status;
     private int loanNumber;
-
+    //getter for date filed
     public Date getDateFiled() { return dateFiled; }
-
+    //setter for date filed, currently unused
     public void setDateFiled(Date date) { dateFiled = date; }
-
+    //method to set the loan ID number
     public void setLoanNumber(int number) {
         loanNumber = number;
     }
-
+    //method to get the loan ID number
     public int getLoanNumber() {
         return loanNumber;
     }
-
+    //method to get the requested amount
     public int getRequestedAmount() {
         return requestedAmount;
     }
-
+    //method to get the loan qualifications (0 for not qualified, 1 for partially qualified, 2 for fully qualified)
     public int getQualification() {
         return qualification;
     }
-
+    //method to get loan status (whether it will be approved)
     public boolean isStatus() {
         return status;
     }
-
+    //standard constructor
     public Loan_Application(int requestedAmount, int dti, int creditScore, int savings, Date date) {
         this.requestedAmount = requestedAmount;
         this.dti = dti;
@@ -67,23 +69,23 @@ public class Loan_Application {
             return 0;
         }
     }
-
+    //getter for loan amount
     public int getLoanAmount() {
         return loanAmount;
     }
-
+    //getter for DTI
     public int getDti() {
         return dti;
     }
-
+    //getter for credit score
     public int getCreditScore() {
         return creditScore;
     }
-
+    //getter for savings
     public int getSavings() {
         return savings;
     }
-
+    //method to print loan information
     public void printApplication() {
         if (loanNumber != -1) {
             System.out.printf("Loan Number: %d\n", loanNumber);
@@ -97,8 +99,8 @@ public class Loan_Application {
         System.out.printf("Status: %b\n", status);
         System.out.println("=====");
     }
-
-    public boolean equals(Loan_Application comparison) {
+    //builtin equals function for loan application class
+    public boolean equals(@NotNull Loan_Application comparison) {
         return comparison.getRequestedAmount() == this.requestedAmount
                 && comparison.getLoanAmount() == this.loanAmount
                 && comparison.getDti() == this.dti

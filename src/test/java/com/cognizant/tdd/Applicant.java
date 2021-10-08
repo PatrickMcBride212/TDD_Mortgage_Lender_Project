@@ -29,6 +29,7 @@ public class Applicant {
 		this.status = status;
 	}
 
+	// Setters and Getters
 	public int getDti() {
 		return dti;
 	}
@@ -83,6 +84,13 @@ public class Applicant {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "Requested Amount: " + this.getRequested_amount() + ", DTI: " + this.getDti() + ", Credit Score: "
+				+ this.getCredit_score() + ", Savings: " + this.getSavings() + ", Qualification: "
+				+ this.getQualification() + ", Loan Amount: " + this.getLoan_amount() + ", Status: " + this.getStatus() + "\n";
 	}
 
 	@Override

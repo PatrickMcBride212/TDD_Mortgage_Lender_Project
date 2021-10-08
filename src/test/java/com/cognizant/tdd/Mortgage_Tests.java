@@ -46,7 +46,7 @@ public class Mortgage_Tests {
 		Applicant postApp3 = new Applicant(30, 700, 50000, 250000, "Partially Qualified", 200000, "Qualified");
 		assertEquals(postApp3, account.approveLoan(preApp3));
 	}
-	
+
 	@Test
 	public void testApprovalStatus() {
 		Applicant app1 = new Applicant(21, 700, 100000, 2500000);
@@ -56,7 +56,7 @@ public class Mortgage_Tests {
 		boolean status2 = account.loanStatus(app2);
 		assertEquals(true, status2);
 	}
-	
+
 	@Test
 	public void testPending() {
 		Applicant preApp = new Applicant(21, 700, 100000, 250000);
@@ -65,7 +65,7 @@ public class Mortgage_Tests {
 		assertEquals(750000, account.getBalance());
 		assertEquals(250000, account.getPending());
 	}
-	
+
 	@Test
 	public void testLoanTransfer() {
 		Applicant preApp = new Applicant(21, 700, 100000, 250000);
@@ -85,8 +85,8 @@ public class Mortgage_Tests {
 		assertEquals(0, account.getPending());
 		assertEquals(750000, account.getBalance());
 	}
-	
-	@Test 
+
+	@Test
 	public void testExpired() {
 		Applicant preApp = new Applicant(21, 700, 100000, 250000);
 		Applicant postApp = account.approveLoan(preApp);
@@ -97,5 +97,32 @@ public class Mortgage_Tests {
 		account.expiredLoan(postApp, 4);
 		assertEquals(0, account.getPending());
 		assertEquals(1000000, account.getBalance());
+	}
+
+	@Test
+	public void testStatus() {
+		Applicant preApp1 = new Applicant(21, 700, 100000, 250000);
+		Applicant postApp1 = account.approveLoan(preApp1);
+		account.transferFunds(postApp1);
+		assertEquals("Approved", postApp1.getStatus());
+		account.transferLoan(postApp1, true);
+		assertEquals("Accepted", postApp1.getStatus());
+	}
+
+	@Test
+	public void testOutput() {
+		Applicant preApp1 = new Applicant(21, 700, 100000, 250000);
+		Applicant postApp1 = account.approveLoan(preApp1);
+		Applicant preApp2 = new Applicant(30, 700, 150000, 200000);
+		Applicant postApp2 = account.approveLoan(preApp2);
+		Applicant preApp3 = new Applicant(40, 600, 150000, 200000);
+		Applicant postApp3 = account.approveLoan(preApp3);
+		account.transferFunds(postApp1);
+		account.transferFunds(postApp2);
+		account.transferFunds(postApp3);
+		String list = account.searchByStatus("Approved");
+		assertEquals(
+				"Requested Amount: 250000, DTI: 21, Credit Score: 700, Savings: 100000, Qualification: Qualified, Loan Amount: 250000, Status: Approved\nRequested Amount: 200000, DTI: 30, Credit Score: 700, Savings: 150000, Qualification: Qualified, Loan Amount: 200000, Status: Approved\n",
+				list);
 	}
 }

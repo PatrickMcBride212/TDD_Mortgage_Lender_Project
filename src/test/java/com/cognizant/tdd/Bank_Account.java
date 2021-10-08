@@ -84,8 +84,15 @@ public class Bank_Account {
 			this.removePending(applicant.getLoan_amount());
 		}
 		else {
-			this.deposit(this.getPending());
-			this.removePending(this.getPending());
+			this.deposit(applicant.getLoan_amount());
+			this.removePending(applicant.getLoan_amount());
+		}
+	}
+	
+	public void expiredLoan(Applicant applicant, int days) {
+		if (days > 3) {
+			this.deposit(applicant.getLoan_amount());
+			this.removePending(applicant.getLoan_amount());
 		}
 	}
 }

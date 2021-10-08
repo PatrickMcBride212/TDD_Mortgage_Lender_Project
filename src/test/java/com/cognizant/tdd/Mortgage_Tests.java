@@ -85,4 +85,17 @@ public class Mortgage_Tests {
 		assertEquals(0, account.getPending());
 		assertEquals(750000, account.getBalance());
 	}
+	
+	@Test 
+	public void testExpired() {
+		Applicant preApp = new Applicant(21, 700, 100000, 250000);
+		Applicant postApp = account.approveLoan(preApp);
+		account.transferFunds(postApp);
+		account.expiredLoan(postApp, 2);
+		assertEquals(250000, account.getPending());
+		assertEquals(750000, account.getBalance());
+		account.expiredLoan(postApp, 4);
+		assertEquals(0, account.getPending());
+		assertEquals(1000000, account.getBalance());
+	}
 }

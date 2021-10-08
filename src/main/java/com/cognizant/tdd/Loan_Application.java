@@ -1,5 +1,8 @@
 package com.cognizant.tdd;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Loan_Application {
     private final int requestedAmount;
     private int loanAmount;
@@ -7,9 +10,14 @@ public class Loan_Application {
     private final int creditScore;
     private final int savings;
     private final int qualification;
+    private Date dateFiled;
     //status is true if loan is approved, false if not
     private final boolean status;
     private int loanNumber;
+
+    public Date getDateFiled() { return dateFiled; }
+
+    public void setDateFiled(Date date) { dateFiled = date; }
 
     public void setLoanNumber(int number) {
         loanNumber = number;
@@ -31,12 +39,13 @@ public class Loan_Application {
         return status;
     }
 
-    public Loan_Application(int requestedAmount, int dti, int creditScore, int savings) {
+    public Loan_Application(int requestedAmount, int dti, int creditScore, int savings, Date date) {
         this.requestedAmount = requestedAmount;
         this.dti = dti;
         this.creditScore = creditScore;
         this.savings = savings;
         this.qualification = isQualified();
+        dateFiled = date;
         status = qualification != 0;
         loanNumber = -1;
     }

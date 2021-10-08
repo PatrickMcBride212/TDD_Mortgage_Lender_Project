@@ -3,7 +3,9 @@ package com.cognizant.tdd;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class Lender {
     Bank_Account account;
@@ -13,9 +15,11 @@ public class Lender {
     private ArrayList<Loan_Application> onHoldApplications;
     private ArrayList<Loan_Application> acceptedLoans;
     private ArrayList<Loan_Application> rejectedLoans;
+    private ArrayList<Loan_Application> expiredApplications;
+    private Date lenderDate;
     int loanNumber;
 
-    public Lender(Bank_Account account) {
+    public Lender(Bank_Account account, Date date) {
         this.account = account;
         pendingApplications = new ArrayList<>();
         deniedApplications = new ArrayList<>();
@@ -23,7 +27,46 @@ public class Lender {
         onHoldApplications = new ArrayList<>();
         acceptedLoans = new ArrayList<>();
         rejectedLoans = new ArrayList<>();
+        expiredApplications = new ArrayList<>();
+        lenderDate = date;
         loanNumber = 0;
+    }
+
+    //When date is updated, goes through pending, approved, and on hold applications
+    // (All applications not fully accepted or rejected)
+    // and puts all expired applications in the
+    //expiredApplications arraylist
+    public void setLenderDate(Date date) {
+        lenderDate = date;
+        for (Loan_Application application : pendingApplications) {
+            long daysDifference = getDateDifference(application.getDateFiled());
+            if (daysDifference > 3) {
+                expiredApplications.add(application);
+                pendingApplications.remove(application);
+            }
+        }
+        for (Loan_Application application : approvedApplications.values()) {
+            long daysDifference = getDateDifference(application.getDateFiled());
+            if (daysDifference > 3) {
+                expiredApplications.add(application);
+                approvedApplications.remove(application.getLoanNumber());
+            }
+        }
+        for (Loan_Application application : onHoldApplications) {
+            long daysDifference = getDateDifference(application.getDateFiled());
+            if (daysDifference > 3) {
+                expiredApplications.add(application);
+                onHoldApplications.remove(application);
+            }
+        }
+    }
+
+    public long getDateDifference(Date applicationDate) {
+        return TimeUnit.DAYS.convert(lenderDate.getTime() - applicationDate.getTime(), TimeUnit.MILLISECONDS);
+    }
+
+    public Date getLenderDate() {
+        return lenderDate;
     }
 
     public void processPendingApplications() {
@@ -86,6 +129,8 @@ public class Lender {
         return rejectedLoans;
     }
 
+    public ArrayList<Loan_Application> getExpiredApplications() { return expiredApplications; }
+
     public void displayAllLoans() {
         displayPendingLoans();
         displayDeniedLoans();
@@ -93,6 +138,18 @@ public class Lender {
         displayApprovedLoans();
         displayAcceptedLoans();
         displayRejectedLoans();
+        displayExpiredLoans();
+    }
+
+    public void displayExpiredLoans() {
+        System.out.println("Expired applications:");
+        if (expiredApplications.isEmpty()) {
+            System.out.println("None");
+        } else {
+            for (Loan_Application application : expiredApplications) {
+                application.printApplication();
+            }
+        }
     }
 
     public void displayPendingLoans() {

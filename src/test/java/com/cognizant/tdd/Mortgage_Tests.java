@@ -3,6 +3,10 @@ package com.cognizant.tdd;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Mortgage_Tests {
@@ -14,18 +18,43 @@ public class Mortgage_Tests {
     Loan_Application loan4;
     Loan_Application loan5;
     Loan_Application loan6;
+    Loan_Application loan7;
+    Loan_Application loan8;
+    SimpleDateFormat dateFiledFormat;
+    Date dateFiled;
 
     @BeforeEach
     public void setup(){
         account = new Bank_Account(1000000);
-        lender = new Lender(account);
-        loan1 = new Loan_Application(250000, 21, 700, 100000);
-        loan2 = new Loan_Application(250000, 37, 700, 100000);
-        loan3 = new Loan_Application(250000, 30, 600, 100000);
-        loan4 = new Loan_Application(250000, 30, 700, 50000);
-        loan5 = new Loan_Application(250000, 21, 700, 100000);
-        loan6 = new Loan_Application(500000, 21, 700, 200000);
+
+        dateFiledFormat = new SimpleDateFormat("MM-dd-yyyy");
+        dateFiled = null;
+        try {
+            dateFiled = dateFiledFormat.parse("10-4-2021");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        lender = new Lender(account, dateFiled);
+        loan1 = new Loan_Application(250000, 21, 700, 100000, dateFiled);
+        loan2 = new Loan_Application(250000, 37, 700, 100000, dateFiled);
+        loan3 = new Loan_Application(250000, 30, 600, 100000, dateFiled);
+        loan4 = new Loan_Application(250000, 30, 700, 50000, dateFiled);
+        loan5 = new Loan_Application(250000, 21, 700, 100000, dateFiled);
+        loan6 = new Loan_Application(500000, 21, 700, 200000, dateFiled);
+
+        dateFiled = null;
+        try {
+            dateFiled = dateFiledFormat.parse("10-8-2021");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        loan7 = new Loan_Application(1, 21, 700, 200000, dateFiled);
+        loan8 = new Loan_Application(500000, 21, 700, 200000, dateFiled);
     }
+
+    //This test verifies basic functionality of bank account, including deposits, withdrawals, overdraws,
+    //and transferring to pending funds
 
     @Test
     public void testBankAccountWithdrawals() {
@@ -43,13 +72,22 @@ public class Mortgage_Tests {
         int overDraw = account.withdraw(1);
         assertEquals(0, overDraw);
         assertEquals(0, account.getBalance());
+
+        account.deposit(1000000);
+        assertEquals(1000000, account.getBalance());
     }
+
+    //Separate test to verify deposits
 
     @Test
     public void testBankAccountDeposits() {
         account.deposit(100000);
         assertEquals(1100000, account.getBalance());
     }
+
+    //Test to verify information in loan application objects, and make sure
+    //each application is properly qualified, partially qualified (and the amount they qualify for),
+    //or not qualified.
 
     @Test
     public void testLoanApplicationApproval() {
@@ -86,6 +124,9 @@ public class Mortgage_Tests {
         assertTrue(loan4.isStatus());
     }
 
+    //This verifies pending applications are queued properly, and not qualified loans are not added to the
+    //pending applications queue
+
     @Test
     public void lenderPendingApplicationQueueTests() {
         lender.addApplication(loan1);
@@ -100,6 +141,10 @@ public class Mortgage_Tests {
         assertFalse(lender.getPendingApplications().contains(loan3));
         assertTrue(lender.getPendingApplications().contains(loan4));
     }
+
+    //This verifies that the lender properly processes their pending loans.
+    //The lender will approve each loan and transfer the funds to pending given the lender has
+    //enough funds. Otherwise, the loan will be on hold.
 
     @Test
     public void lenderProcessPendingLoansTest() {
@@ -124,6 +169,10 @@ public class Mortgage_Tests {
         assertEquals(loan5, lender.getApprovedApplications().get(loan5.getLoanNumber()));
         assertTrue(lender.getOnHoldApplications().get(0).equals(loan6));
     }
+
+    //This test verifies that the loan acceptance works properly. The lender is notified of the acceptance,
+    //and then the funds are transferred out of the lender's pending account.
+    //This test verifies that happens, and that the accounts reflect the correct balances after each step.
 
     @Test
     public void loanAcceptanceTest() {
@@ -172,6 +221,10 @@ public class Mortgage_Tests {
         assertTrue(lender.getAcceptedLoans().contains(loan5));
     }
 
+    //This test verifies that loan rejection is handled properly. Once the lender is notified of the loan rejection,
+    //they transfer the loan's funds from pending back to their balance. This test goes through the process, and checks
+    //that pending and balance of the lender's account are correct after each step.
+
     @Test
     public void loanRejectionTest() {
         lender.addApplication(loan1);
@@ -208,6 +261,66 @@ public class Mortgage_Tests {
         assertFalse(lender.getAcceptedLoans().contains(loan5));
         assertTrue(lender.getRejectedLoans().contains(loan5));
         assertEquals(550000, lender.account.getBalance());
+
+        //lender.displayAllLoans();
+    }
+
+    @Test
+    public void applicationExpiresTest() {
+        lender.addApplication(loan1);
+        lender.addApplication(loan2);
+        lender.addApplication(loan3);
+        lender.addApplication(loan4);
+        lender.addApplication(loan5);
+
+        lender.processPendingApplications();
+
+        lender.loanAccepted(loan1.getLoanNumber());
+        lender.loanRejected(loan5.getLoanNumber());
+
+        Date newDate = null;
+        try {
+            newDate = dateFiledFormat.parse("10-8-2021");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        lender.setLenderDate(newDate);
+        lender.addApplication(loan6);
+
+        assertTrue(lender.getAcceptedLoans().contains(loan1));
+        assertTrue(lender.getExpiredApplications().contains(loan4));
+        assertTrue(lender.getRejectedLoans().contains(loan5));
+        assertTrue(lender.getPendingApplications().contains(loan6));
+    }
+
+    @Test
+    public void viewAccounts() {
+        lender.addApplication(loan1);
+        lender.addApplication(loan2);
+        lender.addApplication(loan3);
+        lender.addApplication(loan4);
+
+        lender.processPendingApplications();
+
+        lender.addApplication(loan5);
+        lender.addApplication(loan6);
+
+        lender.loanAccepted(loan1.getLoanNumber());
+        lender.loanRejected(loan4.getLoanNumber());
+
+        Date newDate = null;
+        try {
+            newDate = dateFiledFormat.parse("10-8-2021");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        lender.setLenderDate(newDate);
+        lender.account.deposit(5);
+
+        lender.addApplication(loan7);
+        lender.addApplication(loan8);
 
         lender.displayAllLoans();
     }

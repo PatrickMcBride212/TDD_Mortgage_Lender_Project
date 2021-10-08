@@ -65,4 +65,24 @@ public class Mortgage_Tests {
 		assertEquals(750000, account.getBalance());
 		assertEquals(250000, account.getPending());
 	}
+	
+	@Test
+	public void testLoanTransfer() {
+		Applicant preApp = new Applicant(21, 700, 100000, 250000);
+		Applicant postApp = account.approveLoan(preApp);
+		account.transferFunds(postApp);
+		assertEquals(250000, account.getPending());
+		assertEquals(750000, account.getBalance());
+		account.transferLoan(postApp, true);
+		assertEquals(0, account.getPending());
+		assertEquals(750000, account.getBalance());
+		Applicant preApp1 = new Applicant(21, 700, 100000, 250000);
+		Applicant postApp1 = account.approveLoan(preApp1);
+		account.transferFunds(postApp1);
+		assertEquals(250000, account.getPending());
+		assertEquals(500000, account.getBalance());
+		account.transferLoan(postApp1, false);
+		assertEquals(0, account.getPending());
+		assertEquals(750000, account.getBalance());
+	}
 }

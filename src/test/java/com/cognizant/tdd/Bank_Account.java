@@ -78,4 +78,14 @@ public class Bank_Account {
 			this.addPending(amount);
 		}
 	}
+	
+	public void transferLoan(Applicant applicant, boolean accepted) {
+		if (accepted) {
+			this.removePending(applicant.getLoan_amount());
+		}
+		else {
+			this.deposit(this.getPending());
+			this.removePending(this.getPending());
+		}
+	}
 }

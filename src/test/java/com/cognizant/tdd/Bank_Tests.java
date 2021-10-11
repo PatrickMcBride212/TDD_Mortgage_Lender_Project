@@ -41,6 +41,8 @@ public class Bank_Tests {
 
         Loan_Approval laDenied2 = lender.qualifyLoan(new Customer_Account(36, 700, 10000), 25000);
         assertEquals("Loan_Approval{qualification='not qualified', loan_amount=0, status='denied'}", laDenied2.toString());
+
+        assertEquals(45000, lender.getPending_funds());
     }
 
     @Test
@@ -57,6 +59,32 @@ public class Bank_Tests {
                 lender.qualifyLoan(partLoan, 250000).toString());
 
     }
+
+    @Test
+    public void loanAcceptTest(){
+        Loan_Approval laApproved = lender.qualifyLoan(new Customer_Account(20, 700, 10000), 25000);
+        assertEquals(75000, lender.getAvailable_funds());
+        assertEquals(25000, lender.getPending_funds());
+        Loan_Approval acceptedLoan = lender.loanAcceptance(laApproved, true);
+        assertEquals(75000, lender.getAvailable_funds());
+        assertEquals(0, lender.getPending_funds());
+        assertEquals("Loan_Approval{qualification='qualified', loan_amount=25000, status='accepted'}", acceptedLoan.toString());
+
+
+    }
+
+    @Test
+    public void loanRejectTest(){
+        Loan_Approval laReject = lender.qualifyLoan(new Customer_Account(20, 700, 10000), 25000);
+        assertEquals(75000, lender.getAvailable_funds());
+        assertEquals(25000, lender.getPending_funds());
+        Loan_Approval rejectedLoan = lender.loanAcceptance(laReject, false);
+        assertEquals(100000, lender.getAvailable_funds());
+        assertEquals(0, lender.getPending_funds());
+        assertEquals("Loan_Approval{qualification='qualified', loan_amount=25000, status='rejected'}", rejectedLoan.toString());
+    }
+
+
 
 
 

@@ -81,6 +81,21 @@ public class Lender {
         }
     }
 
+    public Loan_Approval loanAcceptance(Loan_Approval loan, boolean isAccepted){
+
+        if(isAccepted){
+            pending_funds -= loan.getLoan_amount();
+            loan.setStatus("accepted");
+            return loan;
+        }else{
+            pending_funds -= loan.getLoan_amount();
+            available_funds += loan.getLoan_amount();
+            loan.setStatus("rejected");
+            return loan;
+
+        }
+    }
+
     @Override
     public String toString() {
         return "Lender{" +

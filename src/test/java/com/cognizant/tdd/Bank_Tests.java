@@ -3,17 +3,27 @@ package com.cognizant.tdd;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Bank_Tests {
 
     //private Customer_Account ca;
     private Lender lender;
+    private Date currentDate;
     //private Loan_Approval la;
 
     @BeforeEach
-    public void setup(){
-        lender = new Lender(100000, 0);
+    public void setup() throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        String setDate = "2021/10/10";
+        currentDate = sdf.parse(setDate);
+
+        lender = new Lender(100000, 0, currentDate);
     }
 
     @Test
@@ -83,6 +93,42 @@ public class Bank_Tests {
         assertEquals(0, lender.getPending_funds());
         assertEquals("Loan_Approval{qualification='qualified', loan_amount=25000, status='rejected'}", rejectedLoan.toString());
     }
+
+    @Test
+    public void loanExpirationHandlingTest(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        try{
+           Date testDate =  sdf.parse("2021/10/06");
+
+        Loan_Approval laExpired = lender.qualifyLoan(new Customer_Account(20, 700, 10000), 25000,
+                testDate);
+
+        Loan_Approval expiredLoan = lender.loanAcceptance(laExpired, true);
+        assertEquals("Loan_Approval{qualification='qualified', loan_amount=25000, status='expired'}", expiredLoan.toString());
+
+        }catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void loanExpirationHand2lingTest(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        try{
+            Date testDate =  sdf.parse("2021/10/08");
+
+            Loan_Approval laExpired = lender.qualifyLoan(new Customer_Account(20, 700, 10000), 25000,
+                    testDate);
+
+            Loan_Approval expiredLoan = lender.loanAcceptance(laExpired, true);
+            assertEquals("Loan_Approval{qualification='qualified', loan_amount=25000, status='accepted'}", expiredLoan.toString());
+
+        }catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 

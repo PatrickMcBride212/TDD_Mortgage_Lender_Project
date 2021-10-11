@@ -1,9 +1,19 @@
 package com.cognizant.tdd;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 public class Lender {
 
     private int available_funds;
     private int pending_funds;
+    private Date current_date;
+
+    public Lender(int available_funds, int pending_funds, Date current_date) {
+        this.available_funds = available_funds;
+        this.pending_funds = pending_funds;
+        this.current_date = current_date;
+    }
 
     public Lender(int available_funds, int pending_funds) {
         this.available_funds = available_funds;
@@ -81,18 +91,69 @@ public class Lender {
         }
     }
 
+
+    public Loan_Approval qualifyLoan(Customer_Account ca, int requestedAmount, Date dateOfCreation){
+        if(ca.getDti() < 36 && ca.getCredit_score() > 620 && ca.getSavings() >= (requestedAmount * .25)){
+
+            if(available_funds >= requestedAmount){
+                available_funds -= requestedAmount;
+                pending_funds += requestedAmount;
+
+                return new Loan_Approval("qualified", requestedAmount, "qualified", dateOfCreation);
+
+            }
+            else{
+                return new Loan_Approval("qualified", requestedAmount, "on hold", dateOfCreation);
+            }
+
+
+        }else if(ca.getDti() < 36 && ca.getCredit_score() > 620 && ca.getSavings() <= (requestedAmount * .25)){
+
+            if(available_funds >= (ca.getSavings() * 4)){
+                available_funds -= (ca.getSavings() * 4);
+                pending_funds += (ca.getSavings() * 4);
+
+                return new Loan_Approval("partially qualified", (ca.getSavings() * 4), "qualified", dateOfCreation);
+
+            }
+            else{
+                return new Loan_Approval("partially qualified", (ca.getSavings() * 4), "on hold", dateOfCreation);
+            }
+
+        }
+        else{
+            return new Loan_Approval("not qualified", 0, "denied", dateOfCreation);
+        }
+    }
+
     public Loan_Approval loanAcceptance(Loan_Approval loan, boolean isAccepted){
-
-        if(isAccepted){
-            pending_funds -= loan.getLoan_amount();
-            loan.setStatus("accepted");
+        if(loan.getDateOfCreation() != null) {
+            checkExpiration(loan);
+        }
+        if(loan.getStatus().equals("expired")){
             return loan;
-        }else{
-            pending_funds -= loan.getLoan_amount();
-            available_funds += loan.getLoan_amount();
-            loan.setStatus("rejected");
-            return loan;
+        }else {
+            if (isAccepted) {
+                pending_funds -= loan.getLoan_amount();
+                loan.setStatus("accepted");
+                return loan;
+            } else {
+                pending_funds -= loan.getLoan_amount();
+                available_funds += loan.getLoan_amount();
+                loan.setStatus("rejected");
+                return loan;
 
+            }
+        }
+    }
+
+    public void checkExpiration(Loan_Approval loan){
+
+        long diffInMillies = Math.abs(current_date.getTime() - loan.getDateOfCreation().getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+        if(diff > 3){
+            loan.setStatus("expired");
         }
     }
 

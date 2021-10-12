@@ -1,5 +1,8 @@
 package com.cognizant.tdd;
 
+
+//This object represents a customer of the lender, and has information contained within each object that is needed to
+//determine the qualification for a loan by the customer.
 public class Customer_Account {
 
     private int dti;

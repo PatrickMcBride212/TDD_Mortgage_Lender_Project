@@ -2,6 +2,8 @@ package com.cognizant.tdd;
 
 import java.util.Date;
 
+//This Loan_Approval object acts as a data object that signifies the loan between a customer and lender. It is used to keep track of the
+//money being offered, as well as the qualification and status of the offer. A date of creation is added upon initialization as well.
 public class Loan_Approval {
 
     private String qualification;
